@@ -367,10 +367,10 @@ function generateExportCode() {
                 <div class="space-y-3 max-h-48 overflow-y-auto pr-1">
                     ${currentShowData.seasons.map(s => `
                         <div class="bg-black/40 border border-gray-800 p-3 rounded-xl space-y-2">
-                            <div class="font-bold text-xs text-white">Season ${s.season_number} (${s.episode_count || 10} Episodes)</div>
+                            <div class="font-bold text-xs text-white">Season ${s.season_number} (${s.episode_count || 10} ${currentLang === 'th' ? 'ตอน' : 'Tập'})</div>
                             <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
                                 ${Array.from({length: s.episode_count || 10}, (_, i) => `
-                                    <a href="?id=${currentShowData.id}&s=${s.season_number}&e=${i+1}" class="p-1.5 bg-gray-900 border border-gray-800 rounded-lg text-[10px] text-center text-gray-300 hover:bg-red-600 hover:text-white transition truncate">
+                                    <a href="?id=${currentShowData.id}&s=${s.season_number}&e=${i+1}&lang=${currentLang}" class="p-1.5 bg-gray-900 border border-gray-800 rounded-lg text-[10px] text-center text-gray-300 hover:bg-red-600 hover:text-white transition truncate">
                                         Ep ${i+1}
                                     </a>
                                 `).join('')}
@@ -381,7 +381,7 @@ function generateExportCode() {
             </div>
         </div>
 
-        <!-- 2. Banner Ad 300x250 Below Judul & Season List -->
+        <!-- 2. Ads Banner 300x250 Below Judul & Season List -->
         <div class="bg-[#1e293b] border border-gray-800 p-4 rounded-2xl flex flex-col items-center justify-center text-center">
             <span class="text-[10px] text-gray-500 uppercase block mb-2 font-semibold">Sponsored Ad (300x250)</span>
             <div class="w-[300px] h-[250px] bg-black/40 border border-gray-800 rounded-xl flex items-center justify-center overflow-hidden">
@@ -397,22 +397,22 @@ function generateExportCode() {
             <div class="absolute inset-0 bg-cover bg-center opacity-40 blur-sm" style="background-image: url('${currentShowData.backdrop}')"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             <div class="relative z-10 text-center px-4">
-                <a href="#watch" onclick="alert('Redirecting to VIP HD stream...'); return false;" class="w-16 h-16 bg-red-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg shadow-red-600/50 cursor-pointer hover:scale-110 transition">
+                <a href="#watch" onclick="alert('${currentLang === 'th' ? 'กำลังเปิดเครื่องเล่น HD...' : 'Đang chuyển đến trình phát HD...'}'); return false;" class="w-16 h-16 bg-red-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg shadow-red-600/50 cursor-pointer hover:scale-110 transition">
                     <i class="fa-solid fa-play text-xl ml-1"></i>
                 </a>
                 <h4 class="text-lg font-bold text-white">${currentShowData.name} - S${selectedSeasonNumber} E${selectedEpisodeNumber}</h4>
-                <p class="text-xs text-gray-300 mt-1">Server HD Streaming Aktif</p>
+                <p class="text-xs text-gray-300 mt-1">${currentLang === 'th' ? 'เซิร์ฟเวอร์สตรีมมิ่ง HD ทำงานอยู่' : 'Máy Chủ Phát Trực Tuyến HD Đang Hoạt Động'}</p>
             </div>
         </div>
 
         <!-- 4. CTA "Watch Now No Ads" -->
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-red-600/20 to-[#1e293b] border border-red-600/40 p-5 rounded-2xl">
             <div>
-                <h5 class="font-bold text-white text-base">Watch Now No Ads & Max Speed</h5>
-                <p class="text-xs text-gray-300">Nikmati tayangan tanpa batas iklan pop-up dengan akses VIP eksklusif.</p>
+                <h5 class="font-bold text-white text-base">${currentLang === 'th' ? 'ดูแบบไม่มีโฆษณา & ความเร็วสูงสุด?' : 'Xem Không Quảng Cáo & Tốc Độ Tối Đa?'}</h5>
+                <p class="text-xs text-gray-300">${currentLang === 'th' ? 'สัมผัสประสบการณ์สตรีมมิ่งแบบพรีเมียมด้วยปุ่ม Watch Now No Ads!' : 'Trải nghiệm phát trực tuyến cao cấp với nút Watch Now No Ads!'}</p>
             </div>
-            <a href="#vip" onclick="alert('Watch Now No Ads VIP Clicked!'); return false;" class="w-full sm:w-auto px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl text-sm transition text-center shadow-lg shadow-red-600/30 shrink-0">
-                <i class="fa-solid fa-crown mr-2"></i> Watch Now No Ads
+            <a href="#vip" onclick="alert('${currentLang === 'th' ? 'ลิงก์ VIP ทำงานปกติ!' : 'Hệ thống VIP hoạt động tốt!'}'); return false;" class="w-full sm:w-auto px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl text-sm transition text-center shadow-lg shadow-red-600/30 shrink-0">
+                <i class="fa-solid fa-crown mr-2"></i> Watch Now No Ads (VIP)
             </a>
         </div>
 
@@ -427,7 +427,7 @@ function generateExportCode() {
             <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400">${currentLang === 'th' ? 'นำทางตอน' : 'Điều Hướng Tập Phim'}</h3>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 ${(seasonEpisodesCache[selectedSeasonNumber] || []).map(ep => `
-                    <a href="?id=${currentShowData.id}&s=${selectedSeasonNumber}&e=${ep.episode_number}" class="p-2.5 rounded-xl text-left border transition text-xs font-medium truncate ${ep.episode_number === selectedEpisodeNumber ? 'bg-red-600 border-red-500 text-white shadow' : 'bg-black/40 border-gray-800 text-gray-300 hover:bg-gray-800'}">
+                    <a href="?id=${currentShowData.id}&s=${selectedSeasonNumber}&e=${ep.episode_number}&lang=${currentLang}" class="p-2.5 rounded-xl text-left border transition text-xs font-medium truncate ${ep.episode_number === selectedEpisodeNumber ? 'bg-red-600 border-red-500 text-white shadow' : 'bg-black/40 border-gray-800 text-gray-300 hover:bg-gray-800'}">
                         <div class="font-bold">Ep ${ep.episode_number}</div>
                         <div class="truncate text-[10px] opacity-80">${ep.name}</div>
                     </a>
@@ -443,7 +443,7 @@ function generateExportCode() {
                     <div class="bg-black/40 border border-gray-800 rounded-xl p-3 text-center">
                         <img src="${actor.profile_path ? 'https://image.tmdb.org/t/p/w185' + actor.profile_path : 'https://placehold.co/150x150/1f1f1f/ffffff?text=Actor'}" alt="${actor.name}" class="w-16 h-16 object-cover rounded-full mx-auto mb-2 shadow">
                         <h5 class="font-bold text-xs text-white truncate">${actor.name}</h5>
-                        <p class="text-[10px] text-gray-400 truncate">${actor.character || 'Actor'}</p>
+                        <p class="text-[10px] text-gray-400 truncate">${actor.character || (currentLang === 'th' ? 'นักแสดง' : 'Diễn viên')}</p>
                     </div>
                 `).join('')}
             </div>
