@@ -5,24 +5,25 @@ let selectedSeasonNum = 1;
 let selectedEpisodeNum = 1;
 let currentSeasonEpisodes = [];
 let currentCast = [];
+let allSeasonsEpisodesData = {}; // Store all episodes grouped by season for batch generation
 
 const i18n = {
     th: {
         nav_generator: "เครื่องมือสร้าง (Generator)",
         nav_preview: "ดูตัวอย่างสด (Live Preview)",
         ui_brand_title: "สตูดิโอสตรีมมิ่ง",
-        gen_heading: "TMDB Batch URL & Template Generator",
-        gen_subheading: "ป้อน TMDB ID หรือ URL ซีรีส์เพื่อสร้างหน้าสตรีมมิ่งอัตโนมัติพร้อม URL ทุกซีซั่นและทุกตอน รวมถึงแปลภาษาไทยอัตโนมัติ",
-        btn_generate_all: "สร้าง URL และหน้าทั้งหมด",
+        gen_heading: "TMDB Batch URL & All-Season Generator",
+        gen_subheading: "ป้อน TMDB ID หรือ URL เพื่อสร้างหน้าสตรีมมิ่งอัตโนมัติพร้อมรายการทุกซีซั่น ทุกตอน และแปลภาษาไทย/เวียดนามทันที",
+        btn_generate_all: "สร้าง URL และซีซั่นทั้งหมด",
         ph_title: "ยังไม่ได้โหลดข้อมูลซีรีส์ใดๆ",
-        ph_sub: "ป้อน TMDB ID หรือเลือกตัวอย่างด้านล่างเพื่อเริ่มต้นสร้าง URL",
+        ph_sub: "ป้อน TMDB ID หรือเลือกตัวอย่างด้านล่างเพื่อเริ่มสร้างหน้าสตรีมมิ่ง",
         lbl_sample: "ตัวอย่าง:",
         btn_preview_page: "ดูตัวอย่างหน้าสตรีมมิ่ง",
-        txt_season_list_title: "รายการ URL และซีซั่นทั้งหมด (คลิกได้)",
+        txt_season_list_title: "รายการ URL และซีซั่นทั้งหมด (คลิกเพื่อเปลี่ยนตอน)",
         btn_copy_all_urls: "คัดลอก URL ทั้งหมด",
-        txt_ep_desc: "เลือกตอนด้านล่างเพื่อสลับหน้าและดูตัวอย่างทันที:",
+        txt_ep_desc: "รายการตอนทั้งหมดของทุกซีซั่น (คลิกเพื่อเปิดหน้าเพจ/ดูตัวอย่างทันที):",
         export_title: "ส่งออกโค้ด HTML (จัดเรียงตามลำดับ UI เป๊ะ)",
-        export_desc: "ดาวน์โหลดไฟล์ HTML พร้อมโครงสร้าง: Title -> Ads 300x250 -> Player -> CTA -> Synopsis -> Seasons -> All Episodes -> Actor -> Footer",
+        export_desc: "ดาวน์โหลดไฟล์ HTML พร้อมโครงสร้าง: Title -> Ads 300x250 -> Player -> CTA -> Poster+Synopsis -> Seasons -> All Episodes -> Actor -> Footer",
         btn_download_html: "ดาวน์โหลด HTML",
         btn_back: "กลับไปยัง Generator",
         ad_label: "Sponsored Advertisement (300x250)",
@@ -39,18 +40,18 @@ const i18n = {
         nav_generator: "Công cụ tạo (Generator)",
         nav_preview: "Xem trước (Live Preview)",
         ui_brand_title: "Studio Phát Trực Tuyến",
-        gen_heading: "Trình tạo URL & Mẫu TMDB Hàng Loạt",
-        gen_subheading: "Nhập ID TMDB hoặc URL để tạo trang phát trực tuyến tự động với tất cả URL các mùa và tập phim, kèm dịch tiếng Việt tự động",
-        btn_generate_all: "Tạo Tất Cả URL & Trang",
+        gen_heading: "Trình tạo URL & Tất Cả Các Mùa TMDB",
+        gen_subheading: "Nhập ID TMDB hoặc URL để tạo trang phát trực tuyến tự động với tất cả các mùa, tập phim và dịch tiếng Thái/Việt",
+        btn_generate_all: "Tạo Tất Cả URL & Mùa",
         ph_title: "Chưa có dữ liệu phim nào được tải",
         ph_sub: "Nhập ID TMDB hoặc chọn phim mẫu bên dưới để bắt đầu",
         lbl_sample: "Phim mẫu:",
         btn_preview_page: "Xem trước trang phát trực tuyến",
-        txt_season_list_title: "Danh sách URL & Các mùa phim",
+        txt_season_list_title: "Danh sách URL & Các mùa phim (Nhấp để chọn)",
         btn_copy_all_urls: "Sao chép tất cả URL",
-        txt_ep_desc: "Chọn tập bên dưới để kiểm tra hoặc chuyển đổi trang ngay:",
-        export_title: "Xuất mã HTML (Có quảng cáo theo bố cục chuẩn)",
-        export_desc: "Tải xuống tệp HTML hoàn chỉnh với thứ tự UI chính xác",
+        txt_ep_desc: "Danh sách tất cả các tập phim (Nhấp để mở trang/kiểm tra ngay):",
+        export_title: "Xuất mã HTML (Theo đúng thứ tự UI chuẩn)",
+        export_desc: "Tải xuống tệp HTML hoàn chỉnh với thứ tự giao diện chuẩn cho desktop và mobile",
         btn_download_html: "Tải xuống HTML",
         btn_back: "Quay lại Generator",
         ad_label: "Quảng cáo tài trợ (300x250)",
@@ -140,7 +141,20 @@ async function fetchTMDBData() {
         selectedEpisodeNum = 1;
         currentCast = data.credits && data.credits.cast ? data.credits.cast : [];
 
-        await loadSeasonEpisodes(showId, selectedSeasonNum);
+        // Batch load episodes for ALL valid seasons
+        allSeasonsEpisodesData = {};
+        for (let season of data.seasons) {
+            if (season.season_number === 0) continue; // Skip specials if needed
+            try {
+                const sRes = await fetch(`https://api.themoviedb.org/3/tv/${showId}/season/${season.season_number}?api_key=${TMDB_API_KEY}&language=${tmdbLang}`);
+                const sData = await sRes.json();
+                allSeasonsEpisodesData[season.season_number] = sData.episodes || [];
+            } catch(e) {
+                allSeasonsEpisodesData[season.season_number] = [];
+            }
+        }
+
+        currentSeasonEpisodes = allSeasonsEpisodesData[selectedSeasonNum] || [];
         renderShowDetails();
         document.getElementById('generator-placeholder').classList.add('hidden');
         document.getElementById('generator-results').classList.remove('hidden');
@@ -167,19 +181,12 @@ async function loadSampleShow(id) {
     await fetchTMDBData();
 }
 
-async function loadSeasonEpisodes(showId, seasonNum) {
-    selectedSeasonNum = seasonNum;
-    const tmdbLang = currentLanguage === 'th' ? 'th-TH' : 'vi-VN';
-    const url = `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNum}?api_key=${TMDB_API_KEY}&language=${tmdbLang}`;
-    
-    try {
-        const res = await fetch(url);
-        const data = await res.json();
-        currentSeasonEpisodes = data.episodes || [];
-    } catch(e) {
-        currentSeasonEpisodes = [];
-    }
-    renderEpisodesUI();
+function selectSeason(sNum) {
+    selectedSeasonNum = sNum;
+    selectedEpisodeNum = 1;
+    currentSeasonEpisodes = allSeasonsEpisodesData[sNum] || [];
+    renderShowDetails();
+    generateExportCode();
 }
 
 function renderShowDetails() {
@@ -245,36 +252,34 @@ function renderSeasonsUI() {
     containerPrev.innerHTML = htmlPrev;
 }
 
-async function selectSeason(sNum) {
-    selectedSeasonNum = sNum;
-    selectedEpisodeNum = 1;
-    await loadSeasonEpisodes(currentShowData.id, sNum);
-    renderShowDetails();
-    generateExportCode();
-}
-
 function renderEpisodesUI() {
     const containerGen = document.getElementById('episodes-container');
     const containerPrev = document.getElementById('preview-episodes-container');
 
-    if (!currentSeasonEpisodes || currentSeasonEpisodes.length === 0) {
-        containerGen.innerHTML = '<div class="text-xs text-gray-500">Memuat episode...</div>';
-        containerPrev.innerHTML = '<div class="text-xs text-gray-500">Memuat episode...</div>';
+    if (!allSeasonsEpisodesData || Object.keys(allSeasonsEpisodesData).length === 0) {
+        containerGen.innerHTML = '<div class="text-xs text-gray-500">Memuat semua episode...</div>';
+        containerPrev.innerHTML = '<div class="text-xs text-gray-500">Memuat semua episode...</div>';
         return;
     }
 
     let html = '';
-    currentSeasonEpisodes.forEach(ep => {
-        const activeClass = ep.episode_number === selectedEpisodeNum ? 'border-red-600 bg-red-950/30 text-white' : 'border-gray-800 bg-black/40 text-gray-300 hover:border-gray-600';
-        html += `
-            <div onclick="selectEpisode(${ep.episode_number})" class="p-2.5 rounded-xl border ${activeClass} cursor-pointer transition flex items-center justify-between">
-                <div class="truncate">
-                    <span class="font-bold text-xs text-red-400 mr-2">E${ep.episode_number}</span>
-                    <span class="text-xs font-medium">${ep.name || 'Episode ' + ep.episode_number}</span>
+    // Loop through all seasons and their episodes so everything generates in a single view
+    Object.keys(allSeasonsEpisodesData).forEach(sNum => {
+        const eps = allSeasonsEpisodesData[sNum];
+        html += `<div class="col-span-full font-bold text-xs text-red-400 mt-2">Season ${sNum}</div>`;
+        eps.forEach(ep => {
+            const activeClass = (parseInt(sNum) === selectedSeasonNum && ep.episode_number === selectedEpisodeNum) ? 'border-red-600 bg-red-950/30 text-white' : 'border-gray-800 bg-black/40 text-gray-300 hover:border-gray-600';
+            const epTargetUrl = `${window.location.origin}${window.location.pathname}?id=${currentShowData.id}&s=${sNum}&e=${ep.episode_number}`;
+            html += `
+                <div onclick="openEpisodePage(${sNum}, ${ep.episode_number})" class="p-2.5 rounded-xl border ${activeClass} cursor-pointer transition flex items-center justify-between">
+                    <div class="truncate">
+                        <span class="font-bold text-xs text-red-500 mr-2">S${sNum}E${ep.episode_number}</span>
+                        <span class="text-xs font-medium">${ep.name || 'Episode ' + ep.episode_number}</span>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-gray-500 ml-2" title="Buka Halaman Baru"></i>
                 </div>
-                <i class="fa-solid fa-play text-[10px] text-gray-500 ml-2"></i>
-            </div>
-        `;
+            `;
+        });
     });
 
     containerGen.innerHTML = html;
@@ -282,10 +287,22 @@ function renderEpisodesUI() {
     updateUrlBox();
 }
 
-function selectEpisode(eNum) {
+function selectEpisode(sNum, eNum) {
+    selectedSeasonNum = sNum;
     selectedEpisodeNum = eNum;
+    currentSeasonEpisodes = allSeasonsEpisodesData[sNum] || [];
     renderShowDetails();
     generateExportCode();
+}
+
+function openEpisodePage(sNum, eNum) {
+    selectedSeasonNum = sNum;
+    selectedEpisodeNum = eNum;
+    currentSeasonEpisodes = allSeasonsEpisodesData[sNum] || [];
+    renderShowDetails();
+    generateExportCode();
+    // Simulate opening new page / switching view to preview and updating URL simulation
+    switchView('preview');
 }
 
 function renderCastUI() {
@@ -318,11 +335,11 @@ function updateUrlBox() {
 function copyAllGeneratedUrls() {
     if (!currentShowData) return;
     let allUrls = [];
-    currentShowData.seasons.forEach(s => {
-        if(s.season_number === 0) return;
-        for(let i=1; i<=(s.episode_count || 10); i++) {
-            allUrls.push(`${window.location.origin}${window.location.pathname}?id=${currentShowData.id}&s=${s.season_number}&e=${i}`);
-        }
+    Object.keys(allSeasonsEpisodesData).forEach(sNum => {
+        const eps = allSeasonsEpisodesData[sNum];
+        eps.forEach(ep => {
+            allUrls.push(`${window.location.origin}${window.location.pathname}?id=${currentShowData.id}&s=${sNum}&e=${ep.episode_number}`);
+        });
     });
 
     const textToCopy = allUrls.join('\n');
@@ -339,6 +356,9 @@ function generateExportCode() {
     if (!currentShowData) return;
     const showId = currentShowData.id;
     const backdropPath = currentShowData.backdrop_path ? `https://image.tmdb.org/t/p/original${currentShowData.backdrop_path}` : (currentShowData.poster_path ? `https://image.tmdb.org/t/p/original${currentShowData.poster_path}` : '');
+    const foundEp = (allSeasonsEpisodesData[selectedSeasonNum] || []).find(e => e.episode_number === selectedEpisodeNum);
+    const epName = foundEp ? foundEp.name : `Episode ${selectedEpisodeNum}`;
+    const epOverview = foundEp && foundEp.overview ? foundEp.overview : currentShowData.overview;
     
     // Strict UI Component Order: 1. Title -> 2. Ads 300x250 -> 3. Video Player -> 4. CTA -> 5. Poster+Synopsis -> 6. Season -> 7. All Episodes -> 8. Actor -> 9. Footer
     const templateCode = `<!DOCTYPE html>
@@ -346,8 +366,8 @@ function generateExportCode() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${currentShowData.name} - Season ${selectedSeasonNum} Episode ${selectedEpisodeNum}</title>
-    <meta name="description" content="${currentShowData.name} Season ${selectedSeasonNum} Episode ${selectedEpisodeNum} stream online.">
+    <title>${currentShowData.name} - Season ${selectedSeasonNum} Episode ${selectedEpisodeNum} (${epName})</title>
+    <meta name="description" content="Watch ${currentShowData.name} Season ${selectedSeasonNum} Episode ${selectedEpisodeNum} online with zero ads. ${epOverview ? epOverview.substring(0, 120) : ''}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -363,7 +383,7 @@ function generateExportCode() {
         <!-- 1. TITLE -->
         <div class="bg-slate-900 border border-gray-800 p-5 rounded-2xl">
             <h1 class="text-2xl sm:text-3xl font-black">${currentShowData.name}</h1>
-            <p class="text-xs text-gray-400 mt-1">TMDB ID: ${showId} • Season ${selectedSeasonNum} Episode ${selectedEpisodeNum}</p>
+            <p class="text-xs text-gray-400 mt-1">TMDB ID: ${showId} • Season ${selectedSeasonNum} Episode ${selectedEpisodeNum}: ${epName}</p>
         </div>
 
         <!-- 2. ADS BANNER (300x250) -->
@@ -375,7 +395,7 @@ function generateExportCode() {
             </div>
         </div>
 
-        <!-- 3. FAKE VIDEO PLAYER WITH TMDB THUMBNAIL -->
+        <!-- 3. FAKE VIDEO PLAYER WITH TMDB THUMBNAIL/BACKDROP -->
         <div class="aspect-video bg-black rounded-2xl relative overflow-hidden shadow-2xl border border-gray-800 bg-cover bg-center flex items-center justify-center" style="background-image: url('${backdropPath}');">
             <div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
             <div class="relative z-10 flex flex-col items-center cursor-pointer" onclick="alert('${currentLanguage === 'th' ? 'กำลังเปิดเครื่องเล่นวิดีโอ...' : 'Đang mở trình phát video...'}')">
@@ -395,9 +415,9 @@ function generateExportCode() {
         <div class="bg-slate-900 border border-gray-800 p-5 rounded-2xl flex flex-col sm:flex-row gap-5">
             <img src="https://image.tmdb.org/t/p/w500${currentShowData.poster_path}" class="w-32 h-44 object-cover rounded-xl shrink-0 mx-auto sm:mx-0 border border-gray-800">
             <div class="space-y-2">
-                <h3 class="font-bold text-base text-red-500">Season ${selectedSeasonNum} Episode ${selectedEpisodeNum}</h3>
+                <h3 class="font-bold text-base text-red-500">Season ${selectedSeasonNum} Episode ${selectedEpisodeNum} - ${epName}</h3>
                 <h4 class="text-xs font-semibold text-gray-400 uppercase">Sinopsis / Tóm tắt</h4>
-                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">${currentShowData.overview || ''}</p>
+                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">${epOverview || ''}</p>
             </div>
         </div>
 
@@ -405,7 +425,7 @@ function generateExportCode() {
         <div class="bg-slate-900 border border-gray-800 p-5 rounded-2xl space-y-3">
             <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Seasons</h3>
             <div class="flex flex-wrap gap-2">
-                ${currentShowData.seasons.map(s => s.season_number > 0 ? `<span class="px-3 py-1.5 rounded-xl text-xs bg-slate-800 text-gray-300 border border-gray-700">Season ${s.season_number}</span>` : '').join('')}
+                ${currentShowData.seasons.map(s => s.season_number > 0 ? `<a href="?id=${showId}&s=${s.season_number}&e=1" class="px-3 py-1.5 rounded-xl text-xs bg-slate-800 text-gray-300 border border-gray-700 hover:bg-red-600 hover:text-white transition">Season ${s.season_number}</a>` : '').join('')}
             </div>
         </div>
 
@@ -413,7 +433,7 @@ function generateExportCode() {
         <div class="bg-slate-900 border border-gray-800 p-5 rounded-2xl space-y-3">
             <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">All Episodes</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-72 overflow-y-auto pr-1">
-                ${currentSeasonEpisodes.map(ep => `<div class="p-2.5 rounded-xl border border-gray-800 bg-black/40 text-gray-300 flex items-center justify-between"><span class="font-bold text-xs text-red-400 mr-2">E${ep.episode_number}</span><span class="text-xs truncate">${ep.name || 'Episode ' + ep.episode_number}</span></div>`).join('')}
+                ${Object.keys(allSeasonsEpisodesData).map(sNum => allSeasonsEpisodesData[sNum].map(ep => `<a href="?id=${showId}&s=${sNum}&e=${ep.episode_number}" class="p-2.5 rounded-xl border border-gray-800 bg-black/40 text-gray-300 flex items-center justify-between hover:border-red-600 transition"><span class="font-bold text-xs text-red-400 mr-2">S${sNum}E${ep.episode_number}</span><span class="text-xs truncate">${ep.name || 'Episode ' + ep.episode_number}</span></a>`).join('')).join('')}
             </div>
         </div>
 
