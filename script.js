@@ -3,32 +3,32 @@ const translations = {
         brand_title: "สตูดิโอสตรีมมิ่ง",
         nav_generator: "ตัวสร้าง (Generator)",
         nav_preview: "ดูตัวอย่าง",
-        gen_heading: "เครื่องมือสร้างเทมเพลตและลิงก์ TMDB",
-        gen_subheading: "ป้อน TMDB ID หรือ URL ของซีรีส์เพื่อสร้างหน้าสตรีมมิ่งอัตโนมัติพร้อมลิงก์ตอน เรื่องย่อ นักแสดง ปุ่ม CTA และแบนเนอร์โฆษณาเฉพาะในหน้าแสดงผล",
+        gen_heading: "เครื่องมือสร้างเทมเพลตและลิงก์ TMDB (แสดงทุกซีซั่น & ตอนทั้งหมด)",
+        gen_subheading: "ป้อน TMDB ID หรือ URL ของซีรีส์เพื่อสร้างหน้าสตรีมมิ่งอัตโนมัติพร้อมเรียงลำดับ UI ตามต้องการ (รายการซีซั่น, วิดีโอ, โฆษณา 300x250, CTA, เรื่องย่อ, ตอน, นักแสดง)",
         lbl_input_title: "TMDB ID หรือ URL ซีรีส์",
         btn_generate: "สร้างเทมเพลต",
         btn_preview_page: "ดูตัวอย่างหน้าแสดงผล (พร้อมโฆษณา)",
-        season_list_title: "รายการซีซั่น & ตัวสร้าง URL อัตโนมัติ",
+        season_list_title: "รายการซีซั่น & ตอนทั้งหมด (All Seasons & Episodes)",
         ep_desc: "คลิกตอนด้านล่างเพื่อทดสอบหรือคัดลอกลิงก์เทมเพลตที่สร้างขึ้น:",
-        btn_copy_url: "คัดลอก URL",
-        export_title: "ส่งออกโค้ด HTML เทมเพลตแบบเต็ม (พร้อมโฆษณา)",
+        btn_copy_url: "คัดลอก URL ของตอนนี้",
+        export_title: "ส่งออกโค้ด HTML เทมเพลตแบบเต็ม (จัดเรียง UI ตามลำดับที่คุณต้องการ)",
         btn_download_html: "ดาวน์โหลดเทมเพลต HTML",
-        export_desc: "โค้ดเทมเพลตด้านล่างประกอบด้วยแบนเนอร์ 300x250, sticky 728x90 เฉพาะในหน้าผลลัพธ์, เครื่องเล่นวิดีโอ, CTA, เรื่องย่อ และรายชื่อนักแสดง",
+        export_desc: "โค้ดเทมเพลตที่สร้างขึ้นจะจัดเรียง UI ตามลำดับ: Judul & Season List -> Video Player -> Banner 300x250 -> CTA -> Sinopsis -> Episode List -> Cast -> Footer 728x90.",
         ph_title: "ยังไม่ได้โหลดซีรีส์ใดๆ",
         ph_sub: "ป้อน TMDB ID หรือเลือกตัวอย่างยอดนิยมด้านล่างเพื่อเริ่มต้น",
         btn_back: "กลับสู่ตัวสร้าง",
-        simulation_badge: "หน้าแสดงผลลัพธ์สด (รองรับมือถือ & มีโฆษณา)",
+        simulation_badge: "หน้าแสดงผลลัพธ์สด (รองรับมือถือ & มีโฆษณาครบถ้วน)",
         hd_active: "เซิร์ฟเวอร์สตรีมมิ่ง HD ทำงานอยู่",
-        cta_head: "ชอบคุณภาพการสตรีมนี้ไหม?",
-        cta_sub: "รับสิทธิ์เข้าถึง VIP แบบไม่มีโฆษณาและดาวน์โหลดด้วยความเร็วสูงสุด",
-        btn_vip: "เข้าร่วม VIP ตอนนี้",
+        cta_head: "ดูแบบไม่มีโฆษณา & ความเร็วสูงสุด?",
+        cta_sub: "สัมผัสประสบการณ์สตรีมมิ่งแบบพรีเมียมด้วยปุ่ม Watch Now No Ads!",
+        btn_vip: "Watch Now No Ads (VIP)",
         synopsis_heading: "เรื่องย่อตอน",
         cast_heading: "นักแสดงนำ (Cast)",
         nav_ep_heading: "นำทางตอน",
         lbl_select_season: "เลือกซีซั่น",
         lbl_select_ep: "เลือกตอน",
         alert_no_data: "โปรดสร้างเทมเพลตก่อนโดยป้อน TMDB ID หรือเลือกตัวอย่าง!",
-        alert_vip: "คลิกฟีเจอร์ VIP แล้ว! ปุ่ม CTA ทำงานปกติ",
+        alert_vip: "คลิกฟีเจอร์ Watch Now No Ads แล้ว! ระบบลิงก์ VIP ทำงานปกติ",
         alert_copied: "คัดลอก URL ตอนเรียบร้อยแล้ว!",
         alert_downloaded: "ดาวน์โหลดไฟล์เทมเพลต HTML สำเร็จแล้ว!",
         role_actor: "นักแสดง"
@@ -37,32 +37,32 @@ const translations = {
         brand_title: "Studio Phát Trực Tuyến",
         nav_generator: "Trình Tạo",
         nav_preview: "Xem Kết Quả",
-        gen_heading: "Trình Tạo Mẫu & URL TMDB",
-        gen_subheading: "Nhập TMDB ID hoặc URL phim truyền hình để tạo trang phát trực tuyến tự động với liên kết tập phim, tóm tắt, diễn viên, CTA và banner quảng cáo chỉ hiển thị ở trang kết quả.",
+        gen_heading: "Trình Tạo Mẫu & URL TMDB (Hiển Thị Toàn Bộ Mùa & Tập)",
+        gen_subheading: "Nhập TMDB ID hoặc URL phim truyền hình để tạo trang phát trực tuyến với thứ tự UI chính xác: Danh sách Mùa/Tập, Trình phát video, Quảng cáo 300x250, CTA, Tóm tắt, Diễn viên.",
         lbl_input_title: "TMDB ID hoặc URL Series",
         btn_generate: "Tạo Mẫu",
         btn_preview_page: "Xem Trang Kết Quả (Có Quảng Cáo)",
-        season_list_title: "Danh Sách Season & Tạo URL Tự Động",
+        season_list_title: "Danh Sách Tất Cả Mùa & Tập (All Seasons & Episodes)",
         ep_desc: "Nhấp vào tập phim bên dưới để kiểm tra hoặc sao chép liên kết mẫu đã tạo:",
-        btn_copy_url: "Sao Chép URL",
-        export_title: "Xuất Mã Nguồn HTML Đầy Đủ (Kèm Quảng Cáo)",
+        btn_copy_url: "Sao Chép URL Của Tập Này",
+        export_title: "Xuất Mã Nguồn HTML Đầy Đủ (Sắp Xếp Giao Diện Theo Yêu Cầu)",
         btn_download_html: "Tải Xuống Mẫu HTML",
-        export_desc: "Mã mẫu bên dưới đã bao gồm banner 300x250, sticky 728x90 ở trang kết quả, trình phát video, CTA, tóm tắt và danh sách diễn viên.",
+        export_desc: "Mã mẫu HTML xuất ra tuân thủ đúng thứ tự: Tiêu đề -> Trình phát Video -> Quảng cáo 300x250 -> CTA -> Tóm tắt -> Danh sách tập -> Diễn viên -> Footer 728x90.",
         ph_title: "Chưa có series nào được tải",
         ph_sub: "Nhập TMDB ID hoặc chọn mẫu phổ biến bên dưới để bắt đầu.",
         btn_back: "Quay lại Trình Tạo",
         simulation_badge: "Mô Phỏng Trang Kết Quả (Thân thiện di động & Có QC)",
         hd_active: "Máy Chủ Phát Trực Tuyến HD Đang Hoạt Động",
-        cta_head: "Thích chất lượng phát trực tuyến này?",
-        cta_sub: "Nhận quyền truy cập VIP không quảng cáo và tốc độ tải xuống tối đa.",
-        btn_vip: "Tham Gia VIP Ngay",
+        cta_head: "Xem Không Quảng Cáo & Tốc Độ Tối Đa?",
+        cta_sub: "Trải nghiệm phát trực tuyến cao cấp với nút Watch Now No Ads!",
+        btn_vip: "Watch Now No Ads (VIP)",
         synopsis_heading: "Tóm Tắt Tập Phim",
         cast_heading: "Diễn Viên Chính (Cast)",
         nav_ep_heading: "Điều Hướng Tập Phim",
         lbl_select_season: "Chọn Season",
         lbl_select_ep: "Chọn Tập",
         alert_no_data: "Vui lòng tạo mẫu trước bằng cách nhập TMDB ID hoặc chọn mẫu!",
-        alert_vip: "Tính năng VIP đã được nhấp! Nút CTA hoạt động tốt.",
+        alert_vip: "Đã nhấp Watch Now No Ads! Hệ thống VIP hoạt động tốt.",
         alert_copied: "Đã sao chép URL tập phim thành công!",
         alert_downloaded: "Đã tải xuống tệp mẫu HTML thành công!",
         role_actor: "Diễn viên"
@@ -176,7 +176,6 @@ async function fetchTMDBData() {
     fetchBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> Loading...`;
     fetchBtn.disabled = true;
 
-    // Masukkan API Key TMDB Anda yang valid di sini
     const apiKey = "d5a549dec10563dc56696d42f581a771"; 
     const tmdbLang = currentLang === 'th' ? 'th-TH' : 'vi-VN';
 
@@ -184,7 +183,6 @@ async function fetchTMDBData() {
         let res = await fetch(`https://api.themoviedb.org/3/tv/${tvId}?api_key=${apiKey}&language=${tmdbLang}`);
         let data = await res.json();
         
-        // Jika data terjemahan lokal kosong, fallback ke English (en-US) agar data tetap akurat
         if (!data.name && data.status_code) {
             throw new Error(data.status_message || "Gagal mengambil data dari TMDB");
         }
@@ -342,68 +340,117 @@ function copyCurrentUrl() {
 }
 
 function generateExportCode() {
-    const eps = seasonEpisodesCache[selectedSeasonNumber] || [];
-    const currentEp = eps.find(e => e.episode_number === selectedEpisodeNumber) || eps[0];
-    const epName = currentEp ? currentEp.name : `Episode ${selectedEpisodeNumber}`;
-    const epOverview = currentEp ? currentEp.overview : currentShowData.overview;
-
     const code = `<!DOCTYPE html>
 <html lang="${currentLang}" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>${currentShowData.name} - Semua Season & Episode</title>
+    <title>${currentShowData.name} - Season ${selectedSeasonNumber} Episode ${selectedEpisodeNumber}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-[#0f172a] text-gray-100 min-h-screen pb-28">
+<body class="bg-[#0f172a] text-gray-100 min-h-screen pb-32">
     <header class="bg-[#0f172a] border-b border-gray-800 p-4 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <h1 class="text-red-600 font-bold text-xl">${currentShowData.name}</h1>
-            <span class="text-xs bg-gray-800 px-3 py-1 rounded text-gray-300">Daftar Semua Season & Episode</span>
+            <span class="text-xs bg-gray-800 px-3 py-1 rounded text-gray-300">Streaming Hub (TH / VI)</span>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
-        <div class="bg-[#1e293b] border border-gray-800 p-6 rounded-2xl flex flex-col md:flex-row gap-6 items-center">
-            <img src="${currentShowData.poster}" alt="Poster" class="w-32 h-48 object-cover rounded-xl shadow-lg">
-            <div class="space-y-3">
-                <h2 class="text-2xl font-bold text-white">${currentShowData.name}</h2>
-                <p class="text-xs text-gray-400">${currentShowData.first_air_date} • ⭐ ${currentShowData.vote_average} • ${currentShowData.seasons.length} Season(s)</p>
-                <p class="text-sm text-gray-300 leading-relaxed">${currentShowData.overview}</p>
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 space-y-6">
+        <!-- 1. Judul & Daftar Semua Season / Episode Overview -->
+        <div class="bg-[#1e293b] border border-gray-800 p-5 rounded-2xl space-y-3">
+            <h2 class="text-2xl font-bold text-white">${currentShowData.name}</h2>
+            <p class="text-xs text-gray-400">${currentShowData.first_air_date} • ⭐ ${currentShowData.vote_average} • ${currentShowData.seasons.length} Season(s)</p>
+            <div class="border-t border-gray-800 pt-3">
+                <h3 class="text-sm font-bold text-white mb-2"><i class="fa-solid fa-list mr-2 text-red-600"></i> ${currentLang === 'th' ? 'รายการซีซั่น & ตอนทั้งหมด' : 'Danh Sách Tất Cả Mùa & Tập'}</h3>
+                <div class="space-y-3 max-h-48 overflow-y-auto pr-1">
+                    ${currentShowData.seasons.map(s => `
+                        <div class="bg-black/40 border border-gray-800 p-3 rounded-xl space-y-2">
+                            <div class="font-bold text-xs text-white">Season ${s.season_number} (${s.episode_count || 10} Episodes)</div>
+                            <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+                                ${Array.from({length: s.episode_count || 10}, (_, i) => `
+                                    <a href="?id=${currentShowData.id}&s=${s.season_number}&e=${i+1}" class="p-1.5 bg-gray-900 border border-gray-800 rounded-lg text-[10px] text-center text-gray-300 hover:bg-red-600 hover:text-white transition truncate">
+                                        Ep ${i+1}
+                                    </a>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
         </div>
 
-        <!-- Ad Banner 300x250 -->
-        <div class="bg-[#1e293b] border border-gray-800 p-4 rounded-2xl flex flex-col items-center justify-center text-center">
-            <span class="text-[10px] text-gray-500 uppercase block mb-2">Sponsored Ad (300x250)</span>
-            <script>
-              var atOptions = { 'key' : '53541ca00eed825e8c431c12f7418ac0', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
-            </script>
-            <script src="https://buffcasualwhine.com/53541ca00eed825e8c431c12f7418ac0/invoke.js"></script>
+        <!-- 2. Fake Video Player with TMDB Backdrop Thumbnail -->
+        <div class="bg-black border border-gray-800 rounded-2xl overflow-hidden shadow-2xl relative aspect-video flex items-center justify-center">
+            <div class="absolute inset-0 bg-cover bg-center opacity-40 blur-sm" style="background-image: url('${currentShowData.backdrop}')"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+            <div class="relative z-10 text-center px-4">
+                <a href="#watch" onclick="alert('Redirecting to VIP HD stream...'); return false;" class="w-16 h-16 bg-red-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg shadow-red-600/50 cursor-pointer hover:scale-110 transition">
+                    <i class="fa-solid fa-play text-xl ml-1"></i>
+                </a>
+                <h4 class="text-lg font-bold text-white">${currentShowData.name} - S${selectedSeasonNumber} E${selectedEpisodeNumber}</h4>
+                <p class="text-xs text-gray-300 mt-1">Server HD Streaming Aktif</p>
+            </div>
         </div>
 
-        <div class="space-y-6">
-            <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-list mr-2 text-red-600"></i> Daftar Season & Episode Lengkap</h3>
-            <div class="space-y-4">
-                ${currentShowData.seasons.map(s => `
-                    <div class="bg-[#1e293b] border border-gray-800 p-4 rounded-2xl space-y-3">
-                        <h4 class="font-bold text-lg text-white border-b border-gray-800 pb-2">Season ${s.season_number} (${s.episode_count || 10} Episode)</h4>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                            ${Array.from({length: s.episode_count || 10}, (_, i) => `
-                                <a href="https://vidsrc.xyz/embed/tv?tmdb=${currentShowData.id}&season=${s.season_number}&episode=${i+1}" target="_blank" class="p-2.5 bg-black/40 border border-gray-800 rounded-xl text-xs text-gray-300 hover:bg-red-600 hover:text-white transition flex items-center justify-between">
-                                    <span>Ep ${i+1}</span>
-                                    <i class="fa-solid fa-play text-[10px]"></i>
-                                </a>
-                            `).join('')}
-                        </div>
+        <!-- 3. Banner Ad 300x250 Below Video Player -->
+        <div class="bg-[#1e293b] border border-gray-800 p-4 rounded-2xl flex flex-col items-center justify-center text-center">
+            <span class="text-[10px] text-gray-500 uppercase block mb-2 font-semibold">Sponsored Ad (300x250)</span>
+            <div class="w-[300px] h-[250px] bg-black/40 border border-gray-800 rounded-xl flex items-center justify-center overflow-hidden">
+                <script>
+                  var atOptions = { 'key' : '53541ca00eed825e8c431c12f7418ac0', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
+                </script>
+                <script src="https://buffcasualwhine.com/53541ca00eed825e8c431c12f7418ac0/invoke.js"></script>
+            </div>
+        </div>
+
+        <!-- 4. CTA "Watch Now No Ads" -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-red-600/20 to-[#1e293b] border border-red-600/40 p-5 rounded-2xl">
+            <div>
+                <h5 class="font-bold text-white text-base">Watch Now No Ads & Max Speed</h5>
+                <p class="text-xs text-gray-300">Nikmati tayangan tanpa batas iklan pop-up dengan akses VIP eksklusif.</p>
+            </div>
+            <a href="#vip" onclick="alert('Watch Now No Ads VIP Clicked!'); return false;" class="w-full sm:w-auto px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl text-sm transition text-center shadow-lg shadow-red-600/30 shrink-0">
+                <i class="fa-solid fa-crown mr-2"></i> Watch Now No Ads
+            </a>
+        </div>
+
+        <!-- 5. Synopsis -->
+        <div class="bg-[#1e293b] border border-gray-800 p-5 rounded-2xl space-y-3">
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400">${currentLang === 'th' ? 'เรื่องย่อตอน' : 'Tóm Tắt Tập Phim'}</h3>
+            <p class="text-sm text-gray-300 leading-relaxed">${currentShowData.overview}</p>
+        </div>
+
+        <!-- 6. Episode List Navigation -->
+        <div class="bg-[#1e293b] border border-gray-800 p-5 rounded-2xl space-y-3">
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400">${currentLang === 'th' ? 'นำทางตอน' : 'Điều Hướng Tập Phim'}</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                ${(seasonEpisodesCache[selectedSeasonNumber] || []).map(ep => `
+                    <a href="?id=${currentShowData.id}&s=${selectedSeasonNumber}&e=${ep.episode_number}" class="p-2.5 rounded-xl text-left border transition text-xs font-medium truncate ${ep.episode_number === selectedEpisodeNumber ? 'bg-red-600 border-red-500 text-white shadow' : 'bg-black/40 border-gray-800 text-gray-300 hover:bg-gray-800'}">
+                        <div class="font-bold">Ep ${ep.episode_number}</div>
+                        <div class="truncate text-[10px] opacity-80">${ep.name}</div>
+                    </a>
+                `).join('')}
+            </div>
+        </div>
+
+        <!-- 7. Actor / Cast -->
+        <div class="bg-[#1e293b] border border-gray-800 p-5 rounded-2xl space-y-3">
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400">${currentLang === 'th' ? 'นักแสดงนำ (Cast)' : 'Diễn Viên Chính (Cast)'}</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                ${currentShowData.cast.map(actor => `
+                    <div class="bg-black/40 border border-gray-800 rounded-xl p-3 text-center">
+                        <img src="${actor.profile_path ? 'https://image.tmdb.org/t/p/w185' + actor.profile_path : 'https://placehold.co/150x150/1f1f1f/ffffff?text=Actor'}" alt="${actor.name}" class="w-16 h-16 object-cover rounded-full mx-auto mb-2 shadow">
+                        <h5 class="font-bold text-xs text-white truncate">${actor.name}</h5>
+                        <p class="text-[10px] text-gray-400 truncate">${actor.character || 'Actor'}</p>
                     </div>
                 `).join('')}
             </div>
         </div>
     </main>
 
-    <!-- Sticky Footer Ad 728x90 in generated page -->
+    <!-- 8. Sticky Footer Banner 728x90 -->
     <footer class="fixed bottom-0 left-0 right-0 bg-[#0f172a] border-t border-gray-800 py-2.5 flex justify-center z-40">
         <div class="scale-[0.75] sm:scale-100 origin-center">
             <script>
