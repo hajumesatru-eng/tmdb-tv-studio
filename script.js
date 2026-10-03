@@ -13,16 +13,16 @@ const i18n = {
         ui_brand_title: "สตูดิโอสตรีมมิ่ง",
         gen_heading: "TMDB Batch URL & Template Generator",
         gen_subheading: "ป้อน TMDB ID หรือ URL ซีรีส์เพื่อสร้างหน้าสตรีมมิ่งอัตโนมัติพร้อม URL ทุกซีซั่นและทุกตอน รวมถึงแปลภาษาไทยอัตโนมัติ",
-        btn_generate_all: "สร้าง URL ทั้งหมด",
+        btn_generate_all: "สร้าง URL และหน้าทั้งหมด",
         ph_title: "ยังไม่ได้โหลดข้อมูลซีรีส์ใดๆ",
         ph_sub: "ป้อน TMDB ID หรือเลือกตัวอย่างด้านล่างเพื่อเริ่มต้นสร้าง URL",
         lbl_sample: "ตัวอย่าง:",
         btn_preview_page: "ดูตัวอย่างหน้าสตรีมมิ่ง",
-        txt_season_list_title: "รายการ URL และซีซั่นทั้งหมด",
+        txt_season_list_title: "รายการ URL และซีซั่นทั้งหมด (คลิกได้)",
         btn_copy_all_urls: "คัดลอก URL ทั้งหมด",
-        txt_ep_desc: "เลือกตอนด้านล่างเพื่อทดสอบหรือสลับหน้าทันที:",
-        export_title: "ส่งออกโค้ด HTML (รวมโฆษณาตามตำแหน่ง UI)",
-        export_desc: "ดาวน์โหลดไฟล์ HTML พร้อมโครงสร้างตามลำดับ UI: Title -> Ads 300x250 -> Player -> CTA -> Synopsis -> Seasons -> All Episodes -> Actor -> Footer",
+        txt_ep_desc: "เลือกตอนด้านล่างเพื่อสลับหน้าและดูตัวอย่างทันที:",
+        export_title: "ส่งออกโค้ด HTML (จัดเรียงตามลำดับ UI เป๊ะ)",
+        export_desc: "ดาวน์โหลดไฟล์ HTML พร้อมโครงสร้าง: Title -> Ads 300x250 -> Player -> CTA -> Synopsis -> Seasons -> All Episodes -> Actor -> Footer",
         btn_download_html: "ดาวน์โหลด HTML",
         btn_back: "กลับไปยัง Generator",
         ad_label: "Sponsored Advertisement (300x250)",
@@ -41,7 +41,7 @@ const i18n = {
         ui_brand_title: "Studio Phát Trực Tuyến",
         gen_heading: "Trình tạo URL & Mẫu TMDB Hàng Loạt",
         gen_subheading: "Nhập ID TMDB hoặc URL để tạo trang phát trực tuyến tự động với tất cả URL các mùa và tập phim, kèm dịch tiếng Việt tự động",
-        btn_generate_all: "Tạo Tất Cả URL",
+        btn_generate_all: "Tạo Tất Cả URL & Trang",
         ph_title: "Chưa có dữ liệu phim nào được tải",
         ph_sub: "Nhập ID TMDB hoặc chọn phim mẫu bên dưới để bắt đầu",
         lbl_sample: "Phim mẫu:",
@@ -49,7 +49,7 @@ const i18n = {
         txt_season_list_title: "Danh sách URL & Các mùa phim",
         btn_copy_all_urls: "Sao chép tất cả URL",
         txt_ep_desc: "Chọn tập bên dưới để kiểm tra hoặc chuyển đổi trang ngay:",
-        export_title: "Xuất mã HTML (Có quảng cáo theo đúng thứ tự bố cục UI)",
+        export_title: "Xuất mã HTML (Có quảng cáo theo bố cục chuẩn)",
         export_desc: "Tải xuống tệp HTML hoàn chỉnh với thứ tự UI chính xác",
         btn_download_html: "Tải xuống HTML",
         btn_back: "Quay lại Generator",
@@ -214,7 +214,7 @@ function renderShowDetails() {
     let epOverview = foundEp && foundEp.overview ? foundEp.overview : currentShowData.overview;
     document.getElementById('preview-synopsis').innerText = epOverview || 'Sinopsis episode...';
 
-    // SEO Metadata per-season and per-episode
+    // Dynamic SEO Metadata per season and episode
     const seoTitle = `${currentShowData.name} - Season ${selectedSeasonNum} Episode ${selectedEpisodeNum} (${epName}) | Streaming`;
     document.getElementById('page-seo-title').innerText = seoTitle;
     document.getElementById('page-seo-desc').content = `Watch ${currentShowData.name} Season ${selectedSeasonNum} Episode ${selectedEpisodeNum} online with zero ads. ${epOverview ? epOverview.substring(0, 120) : ''}`;
