@@ -4,7 +4,7 @@ const translations = {
         nav_generator: "ตัวสร้าง (Generator)",
         nav_preview: "ดูตัวอย่าง",
         gen_heading: "เครื่องมือสร้างเทมเพลตและลิงก์ TMDB (แสดงทุกซีซั่น & ตอนทั้งหมด)",
-        gen_subheading: "ป้อน TMDB ID หรือ URL ของซีรีส์เพื่อสร้างหน้าสตรีมมิ่งอัตโนมัติพร้อมเรียงลำดับ UI ตามต้องการ (รายการซีซั่น, วิดีโอ, โฆษณา 300x250, CTA, เรื่องย่อ, ตอน, นักแสดง)",
+        gen_subheading: "ป้อน TMDB ID หรือ URL ของซีรีส์เพื่อสร้างหน้าสตรีมมิ่งอัตโนมัติพร้อมเรียงลำดับ UI ตามต้องการ (รายการซีซั่น, โฆษณา 300x250, วิดีโอ, CTA, เรื่องย่อ, ตอน, นักแสดง)",
         lbl_input_title: "TMDB ID หรือ URL ซีรีส์",
         btn_generate: "สร้างเทมเพลต",
         btn_preview_page: "ดูตัวอย่างหน้าแสดงผล (พร้อมโฆษณา)",
@@ -13,7 +13,7 @@ const translations = {
         btn_copy_url: "คัดลอก URL ของตอนนี้",
         export_title: "ส่งออกโค้ด HTML เทมเพลตแบบเต็ม (จัดเรียง UI ตามลำดับที่คุณต้องการ)",
         btn_download_html: "ดาวน์โหลดเทมเพลต HTML",
-        export_desc: "โค้ดเทมเพลตที่สร้างขึ้นจะจัดเรียง UI ตามลำดับ: Judul & Season List -> Video Player -> Banner 300x250 -> CTA -> Sinopsis -> Episode List -> Cast -> Footer 728x90.",
+        export_desc: "โค้ดเทมเพลตที่สร้างขึ้นจะจัดเรียง UI ตามลำดับ: Judul & Season List -> Banner 300x250 -> Video Player -> CTA -> Sinopsis -> Episode List -> Cast -> Footer 728x90.",
         ph_title: "ยังไม่ได้โหลดซีรีส์ใดๆ",
         ph_sub: "ป้อน TMDB ID หรือเลือกตัวอย่างยอดนิยมด้านล่างเพื่อเริ่มต้น",
         btn_back: "กลับสู่ตัวสร้าง",
@@ -38,7 +38,7 @@ const translations = {
         nav_generator: "Trình Tạo",
         nav_preview: "Xem Kết Quả",
         gen_heading: "Trình Tạo Mẫu & URL TMDB (Hiển Thị Toàn Bộ Mùa & Tập)",
-        gen_subheading: "Nhập TMDB ID hoặc URL phim truyền hình để tạo trang phát trực tuyến với thứ tự UI chính xác: Danh sách Mùa/Tập, Trình phát video, Quảng cáo 300x250, CTA, Tóm tắt, Diễn viên.",
+        gen_subheading: "Nhập TMDB ID hoặc URL phim truyền hình để tạo trang phát trực tuyến với thứ tự UI chính xác: Danh sách Mùa/Tập -> Quảng cáo 300x250 -> Trình phát video -> CTA -> Tóm tắt -> Danh sách tập -> Diễn viên.",
         lbl_input_title: "TMDB ID hoặc URL Series",
         btn_generate: "Tạo Mẫu",
         btn_preview_page: "Xem Trang Kết Quả (Có Quảng Cáo)",
@@ -47,7 +47,7 @@ const translations = {
         btn_copy_url: "Sao Chép URL Của Tập Này",
         export_title: "Xuất Mã Nguồn HTML Đầy Đủ (Sắp Xếp Giao Diện Theo Yêu Cầu)",
         btn_download_html: "Tải Xuống Mẫu HTML",
-        export_desc: "Mã mẫu HTML xuất ra tuân thủ đúng thứ tự: Tiêu đề -> Trình phát Video -> Quảng cáo 300x250 -> CTA -> Tóm tắt -> Danh sách tập -> Diễn viên -> Footer 728x90.",
+        export_desc: "Mã mẫu HTML xuất ra tuân thủ đúng thứ tự: Tiêu đề & Danh sách mùa -> Quảng cáo 300x250 -> Trình phát Video -> CTA -> Tóm tắt -> Danh sách tập -> Diễn viên -> Footer 728x90.",
         ph_title: "Chưa có series nào được tải",
         ph_sub: "Nhập TMDB ID hoặc chọn mẫu phổ biến bên dưới để bắt đầu.",
         btn_back: "Quay lại Trình Tạo",
@@ -381,7 +381,18 @@ function generateExportCode() {
             </div>
         </div>
 
-        <!-- 2. Fake Video Player with TMDB Backdrop Thumbnail -->
+        <!-- 2. Banner Ad 300x250 Below Judul & Season List -->
+        <div class="bg-[#1e293b] border border-gray-800 p-4 rounded-2xl flex flex-col items-center justify-center text-center">
+            <span class="text-[10px] text-gray-500 uppercase block mb-2 font-semibold">Sponsored Ad (300x250)</span>
+            <div class="w-[300px] h-[250px] bg-black/40 border border-gray-800 rounded-xl flex items-center justify-center overflow-hidden">
+                <script>
+                  var atOptions = { 'key' : '53541ca00eed825e8c431c12f7418ac0', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
+                </script>
+                <script src="https://buffcasualwhine.com/53541ca00eed825e8c431c12f7418ac0/invoke.js"></script>
+            </div>
+        </div>
+
+        <!-- 3. Fake Video Player with TMDB Backdrop Thumbnail -->
         <div class="bg-black border border-gray-800 rounded-2xl overflow-hidden shadow-2xl relative aspect-video flex items-center justify-center">
             <div class="absolute inset-0 bg-cover bg-center opacity-40 blur-sm" style="background-image: url('${currentShowData.backdrop}')"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
@@ -391,17 +402,6 @@ function generateExportCode() {
                 </a>
                 <h4 class="text-lg font-bold text-white">${currentShowData.name} - S${selectedSeasonNumber} E${selectedEpisodeNumber}</h4>
                 <p class="text-xs text-gray-300 mt-1">Server HD Streaming Aktif</p>
-            </div>
-        </div>
-
-        <!-- 3. Banner Ad 300x250 Below Video Player -->
-        <div class="bg-[#1e293b] border border-gray-800 p-4 rounded-2xl flex flex-col items-center justify-center text-center">
-            <span class="text-[10px] text-gray-500 uppercase block mb-2 font-semibold">Sponsored Ad (300x250)</span>
-            <div class="w-[300px] h-[250px] bg-black/40 border border-gray-800 rounded-xl flex items-center justify-center overflow-hidden">
-                <script>
-                  var atOptions = { 'key' : '53541ca00eed825e8c431c12f7418ac0', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
-                </script>
-                <script src="https://buffcasualwhine.com/53541ca00eed825e8c431c12f7418ac0/invoke.js"></script>
             </div>
         </div>
 
