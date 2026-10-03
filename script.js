@@ -168,7 +168,7 @@ async function fetchTMDBData() {
     const tvId = parseTMDBInput(rawInput);
     
     if (!tvId) {
-        alertBox("Invalid TMDB ID or URL format. Example: 1399");
+        alertBox("Format TMDB ID atau URL salah. Contoh: 1399 atau https://www.themoviedb.org/tv/1399");
         return;
     }
 
@@ -176,15 +176,25 @@ async function fetchTMDBData() {
     fetchBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> Loading...`;
     fetchBtn.disabled = true;
 
-    // --- MASUKKAN TMDB API KEY ANDA DI SINI ---
-    const apiKey = "MASUKKAN_API_KEY_ANDA_DISINI"; 
+    // Masukkan API Key TMDB Anda yang valid di sini
+    const apiKey = "d5a549dec10563dc56696d42f581a771"; 
     const tmdbLang = currentLang === 'th' ? 'th-TH' : 'vi-VN';
 
     try {
-        const res = await fetch(`https://api.themoviedb.org/3/tv/${tvId}?api_key=${apiKey}&language=${tmdbLang}`);
-        if (!res.ok) throw new Error("Failed to fetch from TMDB");
+        let res = await fetch(`https://api.themoviedb.org/3/tv/${tvId}?api_key=${apiKey}&language=${tmdbLang}`);
+        let data = await res.json();
         
-        const data = await res.json();
+        // Jika data terjemahan lokal kosong, fallback ke English (en-US) agar data tetap akurat
+        if (!data.name && data.status_code) {
+            throw new Error(data.status_message || "Gagal mengambil data dari TMDB");
+        }
+        if (!data.overview || data.overview.trim() === "") {
+            const resFallback = await fetch(`https://api.themoviedb.org/3/tv/${tvId}?api_key=${apiKey}&language=en-US`);
+            const dataFallback = await resFallback.json();
+            data.overview = dataFallback.overview;
+            data.name = data.name || dataFallback.name;
+        }
+
         const creditsRes = await fetch(`https://api.themoviedb.org/3/tv/${tvId}/credits?api_key=${apiKey}&language=${tmdbLang}`);
         const creditsData = await creditsRes.json();
         
@@ -208,7 +218,8 @@ async function fetchTMDBData() {
         generateExportCode();
 
     } catch (err) {
-        console.warn("API error, loading fallback sample show:", err);
+        console.warn("API Error / Invalid ID:", err);
+        alertBox("Terjadi kesalahan atau API Key tidak valid. Memuat sampel data cadangan...");
         loadSampleShow(tvId);
     } finally {
         fetchBtn.innerHTML = `<i class="fa-solid fa-bolt mr-2"></i> <span data-i18n="btn_generate">Generate Template</span>`;
@@ -220,8 +231,7 @@ async function fetchTMDBData() {
 function loadSampleShow(sampleId) {
     const samples = {
         1399: { id: 1399, name: "Game of Thrones", overview: "Nine noble families fight for control over the lands of Westeros.", poster: "https://image.tmdb.org/t/p/w500/u3bZgnGQ9T01sWNhyveQz0wH0Hl.jpg", backdrop: "https://image.tmdb.org/t/p/original/suopoADq0k8YZr4dQXcU6pToj6s.jpg", first_air_date: "2011", vote_average: "8.4", seasons: [{season_number: 1, episode_count: 10}, {season_number: 2, episode_count: 10}], cast: [{name: "Emilia Clarke", character: "Daenerys Targaryen", profile_path: null}, {name: "Kit Harington", character: "Jon Snow", profile_path: null}] },
-        66732: { id: 66732, name: "Stranger Things", overview: "When a young boy vanishes, a small town uncovers a mystery involving secret experiments.", poster: "https://image.tmdb.org/t/p/w500/49WJfeN0moxb9IPfGn8AIqMGskD.jpg", backdrop: "https://image.tmdb.org/t/p/original/56v2KjBlU4XaOv9rVYEQypROD7P.jpg", first_air_date: "2016", vote_average: "8.6", seasons: [{season_number: 1, episode_count: 8}, {season_number: 2, episode_count: 9}], cast: [{name: "Millie Bobby Brown", character: "Eleven", profile_path: null}, {name: "Finn Wolfhard", character: "Mike Wheeler", profile_path: null}] },
-        85552: { id: 85552, name: "Euphoria", overview: "A group of high school students navigate drugs, sex, identity, trauma, social media and love.", poster: "https://image.tmdb.org/t/p/w500/jtnfNzqZwN4E32FGSxx1YkxFwwf.jpg", backdrop: "https://image.tmdb.org/t/p/original/o7uk5Og72dYlxxGxFh4lxVfYgZg.jpg", first_air_date: "2019", vote_average: "8.3", seasons: [{season_number: 1, episode_count: 8}], cast: [{name: "Zendaya", character: "Rue Bennett", profile_path: null}, {name: "Hunter Schafer", character: "Jules Vaughn", profile_path: null}] }
+        66732: { id: 66732, name: "Stranger Things", overview: "When a young boy vanishes, a small town uncovers a mystery involving secret experiments.", poster: "https://image.tmdb.org/t/p/w500/49WJfeN0moxb9IPfGn8AIqMGskD.jpg", backdrop: "https://image.tmdb.org/t/p/original/56v2KjBlU4XaOv9rVYEQypROD7P.jpg", first_air_date: "2016", vote_average: "8.6", seasons: [{season_number: 1, episode_count: 8}, {season_number: 2, episode_count: 9}], cast: [{name: "Millie Bobby Brown", character: "Eleven", profile_path: null}, {name: "Finn Wolfhard", character: "Mike Wheeler", profile_path: null}] }
     };
 
     currentShowData = samples[sampleId] || samples[1399];
@@ -243,12 +253,15 @@ async function loadSeasonEpisodes(tvId, seasonNum) {
         renderEpisodeList();
         return;
     }
-    const apiKey = "d5a549dec10563dc56696d42f581a771";
+    const apiKey = "cfe422613b250f702980a3bbf9e10713";
     const tmdbLang = currentLang === 'th' ? 'th-TH' : 'vi-VN';
     try {
-        const res = await fetch(`https://api.themoviedb.org/3/tv/${tvId}/season/${seasonNum}?api_key=${apiKey}&language=${tmdbLang}`);
-        if (!res.ok) throw new Error("Failed fetching episodes");
-        const data = await res.json();
+        let res = await fetch(`https://api.themoviedb.org/3/tv/${tvId}/season/${seasonNum}?api_key=${apiKey}&language=${tmdbLang}`);
+        let data = await res.json();
+        if (!data.episodes || data.episodes.length === 0) {
+            const resFallback = await fetch(`https://api.themoviedb.org/3/tv/${tvId}/season/${seasonNum}?api_key=${apiKey}&language=en-US`);
+            data = await resFallback.json();
+        }
         seasonEpisodesCache[seasonNum] = data.episodes || [];
     } catch (e) {
         seasonEpisodesCache[seasonNum] = Array.from({length: 10}, (_, i) => ({
@@ -329,12 +342,17 @@ function copyCurrentUrl() {
 }
 
 function generateExportCode() {
+    const eps = seasonEpisodesCache[selectedSeasonNumber] || [];
+    const currentEp = eps.find(e => e.episode_number === selectedEpisodeNumber) || eps[0];
+    const epName = currentEp ? currentEp.name : `Episode ${selectedEpisodeNumber}`;
+    const epOverview = currentEp ? currentEp.overview : currentShowData.overview;
+
     const code = `<!DOCTYPE html>
 <html lang="${currentLang}" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>${currentShowData.name} - S${selectedSeasonNumber}E${selectedEpisodeNumber}</title>
+    <title>${currentShowData.name} - S${selectedSeasonNumber}E${selectedEpisodeNumber} : ${epName}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -349,7 +367,7 @@ function generateExportCode() {
     <main class="max-w-7xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
             <div class="aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl relative flex items-center justify-center border border-gray-800">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" class="w-full h-full border-0" allowfullscreen></iframe>
+                <iframe src="https://vidsrc.xyz/embed/tv?tmdb=${currentShowData.id}&season=${selectedSeasonNumber}&episode=${selectedEpisodeNumber}" class="w-full h-full border-0" allowfullscreen></iframe>
             </div>
 
             <!-- Ad Banner 300x250 below video player in generated page -->
@@ -370,8 +388,8 @@ function generateExportCode() {
             </div>
 
             <div class="bg-[#1e293b] border border-gray-800 p-6 rounded-2xl space-y-3">
-                <h2 class="text-xl font-bold text-white">Season ${selectedSeasonNumber} Episode ${selectedEpisodeNumber}</h2>
-                <p class="text-sm text-gray-300 leading-relaxed">${currentShowData.overview}</p>
+                <h2 class="text-xl font-bold text-white">S${selectedSeasonNumber} E${selectedEpisodeNumber}: ${epName}</h2>
+                <p class="text-sm text-gray-300 leading-relaxed">${epOverview}</p>
             </div>
         </div>
 
