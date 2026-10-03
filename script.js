@@ -398,6 +398,7 @@ function alertCTA(e) {
 function generateExportCode() {
     if (!currentShowData) return;
     const showId = currentShowData.id;
+    const backdropPath = currentShowData.backdrop_path ? `https://image.tmdb.org/t/p/original${currentShowData.backdrop_path}` : (currentShowData.poster_path ? `https://image.tmdb.org/t/p/original${currentShowData.poster_path}` : '');
     
     const templateCode = `<!DOCTYPE html>
 <html lang="${currentLanguage}" class="dark">
@@ -424,9 +425,13 @@ function generateExportCode() {
             </div>
         </div>
 
-        <!-- 3. Video Player -->
-        <div class="aspect-video bg-black rounded-2xl overflow-hidden border border-gray-800 relative flex items-center justify-center">
-            <iframe src="https://vidsrc.xyz/embed/tv?tmdb=${showId}&season=${selectedSeasonNum}&episode=${selectedEpisodeNum}" class="w-full h-full border-0" allowfullscreen></iframe>
+       <!-- 3. Fake Video Player with TMDB Thumbnail -->
+        <div class="aspect-video bg-black rounded-2xl relative overflow-hidden shadow-2xl border border-gray-800 bg-cover bg-center flex items-center justify-center" style="background-image: url('${backdropPath}');">
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+            <div class="relative z-10 flex flex-col items-center cursor-pointer" onclick="alert('${currentLanguage === 'th' ? 'กำลังเปิดเครื่องเล่นวิดีโอ...' : 'Đang mở trình phát video...'}')">
+                <div class="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center text-white text-2xl shadow-xl hover:scale-110 transition"><i class="fa-solid fa-play ml-1"></i></div>
+                <span class="mt-3 text-xs font-bold bg-black/80 px-3 py-1 rounded-full text-white">${currentShowData.name} - S${selectedSeasonNum} E${selectedEpisodeNum}</span>
+            </div>
         </div>
 
         <!-- 4. CTA Watch Now No Ads -->
