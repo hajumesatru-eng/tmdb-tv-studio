@@ -263,13 +263,11 @@ function renderEpisodesUI() {
     }
 
     let html = '';
-    // Loop through all seasons and their episodes so everything generates in a single view
     Object.keys(allSeasonsEpisodesData).forEach(sNum => {
         const eps = allSeasonsEpisodesData[sNum];
         html += `<div class="col-span-full font-bold text-xs text-red-400 mt-2">Season ${sNum}</div>`;
         eps.forEach(ep => {
             const activeClass = (parseInt(sNum) === selectedSeasonNum && ep.episode_number === selectedEpisodeNum) ? 'border-red-600 bg-red-950/30 text-white' : 'border-gray-800 bg-black/40 text-gray-300 hover:border-gray-600';
-            const epTargetUrl = `${window.location.origin}${window.location.pathname}?id=${currentShowData.id}&s=${sNum}&e=${ep.episode_number}`;
             html += `
                 <div onclick="openEpisodePage(${sNum}, ${ep.episode_number})" class="p-2.5 rounded-xl border ${activeClass} cursor-pointer transition flex items-center justify-between">
                     <div class="truncate">
@@ -301,7 +299,6 @@ function openEpisodePage(sNum, eNum) {
     currentSeasonEpisodes = allSeasonsEpisodesData[sNum] || [];
     renderShowDetails();
     generateExportCode();
-    // Simulate opening new page / switching view to preview and updating URL simulation
     switchView('preview');
 }
 
@@ -459,4 +456,27 @@ function generateExportCode() {
 
     const textarea = document.getElementById('exported-code-preview');
     if(textarea) textarea.value = templateCode;
+}
+
+function exportTemplateCode() {
+    const code = document.getElementById('exported-code-preview').value;
+    if(!code) return;
+    const blob = new Blob([code], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `streaming_s${selectedSeasonNum}e${selectedEpisodeNum}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function alertPlaySim() {
+    alert(currentLanguage === 'th' ? 'กำลังเปิดเครื่องเล่นวิดีโอสตรีมมิ่ง...' : 'Đang mở trình phát video...');
+}
+
+function alertCTA(e) {
+    e.preventDefault();
+    alert(currentLanguage === 'th' ? 'ไปที่ลิงก์ VIP / ไม่มีโฆษณาเรียบร้อยแล้ว' : 'Đã chuyển đến liên kết VIP thành công!');
 }
