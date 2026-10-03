@@ -349,7 +349,7 @@ function generateExportCode() {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-[#0f172a] text-gray-100 min-h-screen pb-32">
+<body class="bg-[#0f172a] text-gray-100 min-h-screen pb-36">
     <header class="bg-[#0f172a] border-b border-gray-800 p-4 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <h1 class="text-red-600 font-bold text-xl">${currentShowData.name}</h1>
@@ -450,9 +450,9 @@ function generateExportCode() {
         </div>
     </main>
 
-    <!-- 8. Sticky Footer Banner 728x90 -->
-    <footer class="fixed bottom-0 left-0 right-0 bg-[#0f172a] border-t border-gray-800 py-2.5 flex justify-center z-40">
-        <div class="scale-[0.75] sm:scale-100 origin-center">
+    <!-- 8. Sticky Footer Banner 728x90 (Optimized for Mobile & Desktop) -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-[#0f172a] border-t border-gray-800 py-2 px-1 sm:px-4 flex justify-center items-center z-40 overflow-hidden">
+        <div class="w-full max-w-[728px] h-[90px] flex items-center justify-center scale-[0.65] sm:scale-100 origin-center">
             <script>
               var atOptions = { 'key' : '2d751854ce36e13fefddaa58f93251e2', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
             </script>
