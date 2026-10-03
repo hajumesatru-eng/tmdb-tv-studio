@@ -420,8 +420,16 @@ function generateExportCode() {
         <!-- 2. Ads Banner 300x250 -->
         <div class="flex justify-center my-4">
             <div class="w-[300px] h-[250px] bg-slate-900 border border-gray-800 flex items-center justify-center rounded-lg overflow-hidden">
-                <script>var atOptions_1 = {'key':'53541ca00eed825e8c431c12f7418ac0','format':'iframe','height':250,'width':300,'params':{}};</script>
-                <script src="https://buffcasualwhine.com/53541ca00eed825e8c431c12f7418ac0/invoke.js"></script>
+                <script>
+  atOptions = {
+    'key' : '53541ca00eed825e8c431c12f7418ac0',
+    'format' : 'iframe',
+    'height' : 250,
+    'width' : 300,
+    'params' : {}
+  };
+</script>
+<script src="https://buffcasualwhine.com/53541ca00eed825e8c431c12f7418ac0/invoke.js"></script>
             </div>
         </div>
 
