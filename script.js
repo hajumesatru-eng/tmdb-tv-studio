@@ -352,7 +352,7 @@ function generateExportCode() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>${currentShowData.name} - S${selectedSeasonNumber}E${selectedEpisodeNumber} : ${epName}</title>
+    <title>${currentShowData.name} - Semua Season & Episode</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -360,45 +360,45 @@ function generateExportCode() {
     <header class="bg-[#0f172a] border-b border-gray-800 p-4 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <h1 class="text-red-600 font-bold text-xl">${currentShowData.name}</h1>
-            <span class="text-xs bg-gray-800 px-3 py-1 rounded text-gray-300">Season ${selectedSeasonNumber} Episode ${selectedEpisodeNumber}</span>
+            <span class="text-xs bg-gray-800 px-3 py-1 rounded text-gray-300">Daftar Semua Season & Episode</span>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 space-y-6">
-            <div class="aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl relative flex items-center justify-center border border-gray-800">
-                <iframe src="https://vidsrc.xyz/embed/tv?tmdb=${currentShowData.id}&season=${selectedSeasonNumber}&episode=${selectedEpisodeNumber}" class="w-full h-full border-0" allowfullscreen></iframe>
-            </div>
-
-            <!-- Ad Banner 300x250 below video player in generated page -->
-            <div class="bg-[#1e293b] border border-gray-800 p-4 rounded-2xl flex flex-col items-center justify-center text-center">
-                <span class="text-[10px] text-gray-500 uppercase block mb-2">Sponsored Ad (300x250)</span>
-                <script>
-                  var atOptions = { 'key' : '53541ca00eed825e8c431c12f7418ac0', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
-                </script>
-                <script src="https://buffcasualwhine.com/53541ca00eed825e8c431c12f7418ac0/invoke.js"></script>
-            </div>
-
-            <div class="bg-gradient-to-r from-red-600/20 to-gray-900 border border-red-600/40 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div>
-                    <h3 class="font-bold text-white">VIP Streaming Access</h3>
-                    <p class="text-xs text-gray-300">No ads & maximum download speed.</p>
-                </div>
-                <a href="#vip" class="w-full sm:w-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-semibold text-center shadow">Join VIP</a>
-            </div>
-
-            <div class="bg-[#1e293b] border border-gray-800 p-6 rounded-2xl space-y-3">
-                <h2 class="text-xl font-bold text-white">S${selectedSeasonNumber} E${selectedEpisodeNumber}: ${epName}</h2>
-                <p class="text-sm text-gray-300 leading-relaxed">${epOverview}</p>
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
+        <div class="bg-[#1e293b] border border-gray-800 p-6 rounded-2xl flex flex-col md:flex-row gap-6 items-center">
+            <img src="${currentShowData.poster}" alt="Poster" class="w-32 h-48 object-cover rounded-xl shadow-lg">
+            <div class="space-y-3">
+                <h2 class="text-2xl font-bold text-white">${currentShowData.name}</h2>
+                <p class="text-xs text-gray-400">${currentShowData.first_air_date} • ⭐ ${currentShowData.vote_average} • ${currentShowData.seasons.length} Season(s)</p>
+                <p class="text-sm text-gray-300 leading-relaxed">${currentShowData.overview}</p>
             </div>
         </div>
 
+        <!-- Ad Banner 300x250 -->
+        <div class="bg-[#1e293b] border border-gray-800 p-4 rounded-2xl flex flex-col items-center justify-center text-center">
+            <span class="text-[10px] text-gray-500 uppercase block mb-2">Sponsored Ad (300x250)</span>
+            <script>
+              var atOptions = { 'key' : '53541ca00eed825e8c431c12f7418ac0', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
+            </script>
+            <script src="https://buffcasualwhine.com/53541ca00eed825e8c431c12f7418ac0/invoke.js"></script>
+        </div>
+
         <div class="space-y-6">
-            <div class="bg-[#1e293b] border border-gray-800 p-5 rounded-2xl">
-                <h3 class="font-bold text-base text-white mb-3">Cast</h3>
-                <div class="grid grid-cols-2 gap-3">
-                    ${currentShowData.cast.map(actor => `<div class="bg-black/30 p-2 rounded-xl text-center text-xs"><b class="block truncate">${actor.name}</b><span class="text-gray-400 text-[10px] truncate">${actor.character}</span></div>`).join('')}
-                </div>
+            <h3 class="text-xl font-bold text-white"><i class="fa-solid fa-list mr-2 text-red-600"></i> Daftar Season & Episode Lengkap</h3>
+            <div class="space-y-4">
+                ${currentShowData.seasons.map(s => `
+                    <div class="bg-[#1e293b] border border-gray-800 p-4 rounded-2xl space-y-3">
+                        <h4 class="font-bold text-lg text-white border-b border-gray-800 pb-2">Season ${s.season_number} (${s.episode_count || 10} Episode)</h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                            ${Array.from({length: s.episode_count || 10}, (_, i) => `
+                                <a href="https://vidsrc.xyz/embed/tv?tmdb=${currentShowData.id}&season=${s.season_number}&episode=${i+1}" target="_blank" class="p-2.5 bg-black/40 border border-gray-800 rounded-xl text-xs text-gray-300 hover:bg-red-600 hover:text-white transition flex items-center justify-between">
+                                    <span>Ep ${i+1}</span>
+                                    <i class="fa-solid fa-play text-[10px]"></i>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('')}
             </div>
         </div>
     </main>
