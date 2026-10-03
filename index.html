@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TMDB Streaming Studio - Multi Language (TH / VI)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        netflix: {
+                            red: '#E50914',
+                            dark: '#0f172a',
+                            card: '#1e293b',
+                            gray: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-netflix-dark text-gray-100 min-h-screen flex flex-col justify-between selection:bg-netflix-red selection:text-white pb-32">
+
+    <header class="sticky top-0 z-50 bg-netflix-dark/95 backdrop-blur border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('generator')">
+                <div class="bg-netflix-red text-white p-2 rounded-lg font-bold text-xl tracking-wider flex items-center shadow-lg shadow-netflix-red/30">
+                    <i class="fa-solid fa-play mr-2"></i>TMDB<span class="text-xs ml-1 bg-black/40 px-1.5 py-0.5 rounded">PRO</span>
+                </div>
+                <span id="ui-brand-title" class="font-semibold text-lg hidden sm:inline text-gray-200">Streaming Studio</span>
+            </div>
+            
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <select id="lang-select" onchange="changeLanguage()" class="bg-black/60 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs sm:text-sm text-gray-200 focus:outline-none focus:border-netflix-red">
+                    <option value="th">🇹🇭 ไทย (Thai)</option>
+                    <option value="vi">🇻🇳 Tiếng Việt (Vietnamese)</option>
+                </select>
+
+                <button onclick="switchView('generator')" id="nav-gen-btn" class="text-xs sm:text-sm font-medium px-3 py-2 rounded-md bg-netflix-red text-white transition hover:bg-red-700">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> <span data-i18n="nav_generator">Generator</span>
+                </button>
+                <button onclick="switchView('preview')" id="nav-prev-btn" class="text-xs sm:text-sm font-medium px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-800 transition">
+                    <i class="fa-solid fa-eye mr-1.5"></i> <span data-i18n="nav_preview">Live Preview</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6">
+        
+        <section id="view-generator" class="space-y-6">
+            <div class="bg-gradient-to-r from-slate-900 to-netflix-card border border-gray-800 p-5 sm:p-8 rounded-2xl shadow-xl">
+                <h1 id="gen-heading" class="text-2xl sm:text-3xl font-bold mb-2 text-white">TMDB Template & URL Generator</h1>
+                <p id="gen-subheading" class="text-gray-400 text-xs sm:text-base mb-6">Masukkan TMDB ID atau URL serial TV untuk menghasilkan halaman streaming otomatis dengan tautan episode, sinopsis, aktor, CTA, dan iklan banner terintegrasi.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2">
+                        <label id="lbl-input-title" class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">TMDB ID atau URL Show</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-500">
+                                <i class="fa-solid fa-film"></i>
+                            </span>
+                            <input type="text" id="tmdb-input" placeholder="Contoh: 1399 atau https://www.themoviedb.org/tv/1399" 
+                                class="w-full pl-10 pr-4 py-3 bg-black/60 border border-gray-700 rounded-xl focus:outline-none focus:border-netflix-red text-white placeholder-gray-500 transition text-sm sm:text-base">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2 hidden md:block">&nbsp;</label>
+                        <button onclick="fetchTMDBData()" id="fetch-btn" class="w-full py-3 bg-netflix-red hover:bg-red-700 font-semibold rounded-xl transition flex items-center justify-center shadow-lg shadow-netflix-red/30 text-white text-sm sm:text-base">
+                            <i class="fa-solid fa-bolt mr-2"></i> <span data-i18n="btn_generate">Generate Template</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="error-box" class="hidden mt-4 p-4 bg-red-950/50 border border-red-800 rounded-xl text-red-200 text-sm"></div>
+            </div>
+
+            <div id="generator-results" class="hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-netflix-card border border-gray-800 rounded-2xl p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center space-x-3 mb-4">
+                                <img id="show-poster" src="" alt="Poster" class="w-16 h-24 object-cover rounded-lg shadow">
+                                <div>
+                                    <h3 id="show-title" class="font-bold text-lg text-white line-clamp-1"></h3>
+                                    <p id="show-meta" class="text-xs text-gray-400 mt-1"></p>
+                                    <span id="show-status" class="inline-block mt-2 px-2 py-0.5 text-xs font-semibold bg-emerald-950 text-emerald-400 border border-emerald-800 rounded"></span>
+                                </div>
+                            </div>
+                            <p id="show-synopsis" class="text-xs text-gray-300 line-clamp-4 mb-4"></p>
+                        </div>
+                        <button onclick="switchView('preview')" class="w-full py-2.5 bg-gray-800 hover:bg-gray-700 rounded-xl font-medium text-sm transition text-center text-gray-200">
+                            <i class="fa-solid fa-play mr-2 text-netflix-red"></i> <span data-i18n="btn_preview_page">Preview Live Halaman</span>
+                        </button>
+                    </div>
+
+                    <div class="lg:col-span-2 bg-netflix-card border border-gray-800 rounded-2xl p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                                <h3 id="txt-season-list-title" class="font-bold text-lg text-white">Daftar Season & Auto URL Generator</h3>
+                                <div class="flex items-center space-x-2">
+                                    <select id="season-select" onchange="onSeasonChange()" class="w-full sm:w-auto bg-black/50 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-gray-200 focus:outline-none focus:border-netflix-red">
+                                    </select>
+                                </div>
+                            </div>
+                            <p id="txt-ep-desc" class="text-xs text-gray-400 mb-3">Klik episode di bawah untuk menguji atau menyalin tautan template ter-generate:</p>
+                            <div id="episodes-container" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-h-48 overflow-y-auto pr-1"></div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-gray-400">
+                            <span id="current-selected-url" class="truncate">URL Terpilih: -</span>
+                            <button onclick="copyCurrentUrl()" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition shrink-0">
+                                <i class="fa-regular fa-copy mr-1"></i> <span data-i18n="btn_copy_url">Salin URL</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-netflix-card border border-gray-800 rounded-2xl p-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <h3 class="font-bold text-lg text-white"><i class="fa-solid fa-code text-netflix-red mr-2"></i> <span data-i18n="export_title">Export HTML Template Lengkap (Dengan Ads)</span></h3>
+                        <button onclick="exportTemplateCode()" class="px-4 py-2 bg-netflix-red hover:bg-red-700 text-white font-semibold rounded-xl text-sm transition shadow-lg shadow-netflix-red/30 shrink-0">
+                            <i class="fa-solid fa-download mr-1.5"></i> <span data-i18n="btn_download_html">Download HTML Template</span>
+                        </button>
+                    </div>
+                    <p id="export-desc" class="text-xs text-gray-400 mb-3">Kode template di bawah sudah mencakup banner 300x250, sticky 728x90, video player, CTA, sinopsis, dan daftar aktor.</p>
+                    <textarea id="exported-code-preview" readonly class="w-full h-40 bg-black/60 border border-gray-700 rounded-xl p-3 text-xs font-mono text-gray-300 focus:outline-none resize-none"></textarea>
+                </div>
+            </div>
+
+            <div id="generator-placeholder" class="text-center py-16 bg-netflix-card/50 border border-gray-800/80 rounded-2xl">
+                <div class="w-16 h-16 bg-gray-800 text-gray-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fa-solid fa-tv"></i>
+                </div>
+                <h3 id="ph-title" class="text-lg font-medium text-gray-300">Belum ada serial TV yang dimuat</h3>
+                <p id="ph-sub" class="text-sm text-gray-500 mt-1">Masukkan TMDB ID atau pilih sampel populer di bawah untuk memulai.</p>
+                <div class="flex flex-wrap justify-center gap-2 mt-4 px-4">
+                    <button onclick="loadSampleShow(1399)" class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-medium text-gray-300 transition">Game of Thrones (1399)</button>
+                    <button onclick="loadSampleShow(66732)" class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-medium text-gray-300 transition">Stranger Things (66732)</button>
+                    <button onclick="loadSampleShow(85552)" class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-xs font-medium text-gray-300 transition">Euphoria (85552)</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-preview" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <button onclick="switchView('generator')" class="inline-flex items-center text-sm font-medium text-gray-400 hover:text-white transition">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> <span data-i18n="btn_back">Kembali ke Generator</span>
+                </button>
+                <div id="simulation-badge" class="text-xs text-gray-400 bg-gray-900 border border-gray-800 px-3 py-1.5 rounded-lg">
+                    Live Page Simulation (Mobile Friendly)
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-black border border-gray-800 rounded-2xl overflow-hidden shadow-2xl relative aspect-video flex items-center justify-center">
+                        <div class="absolute inset-0 bg-cover bg-center opacity-40 blur-sm" id="player-backdrop"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                        <div class="relative z-10 text-center px-4">
+                            <div class="w-16 h-16 bg-netflix-red text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg shadow-netflix-red/50 cursor-pointer hover:scale-110 transition">
+                                <i class="fa-solid fa-play text-xl ml-1"></i>
+                            </div>
+                            <h4 id="preview-player-title" class="text-lg font-bold text-white">Memutar Video...</h4>
+                            <p id="txt-hd-active" class="text-xs text-gray-300 mt-1">Server HD Streaming Aktif</p>
+                        </div>
+                    </div>
+
+                    <!-- Banner Ad 300x250 Below Video Player (Displayed only in output/preview page) -->
+                    <div class="bg-netflix-card border border-gray-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center overflow-hidden">
+                        <span class="text-[10px] uppercase font-semibold text-gray-500 tracking-widest mb-3">Sponsored Ad (300x250)</span>
+                        <div class="w-full max-w-[300px] h-[250px] bg-black/40 border border-gray-800 rounded-xl flex items-center justify-center overflow-hidden">
+                            <script>
+                                var atOptions_1 = {
+                                    'key' : '53541ca00eed825e8c431c12f7418ac0',
+                                    'format' : 'iframe',
+                                    'height' : 250,
+                                    'width' : 300,
+                                    'params' : {}
+                                };
+                            </script>
+                            <script src="https://buffcasualwhine.com/53541ca00eed825e8c431c12f7418ac0/invoke.js"></script>
+                        </div>
+                    </div>
+
+                    <!-- CTA Button -->
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-netflix-red/20 to-netflix-card border border-netflix-red/40 p-4 sm:p-5 rounded-2xl">
+                        <div>
+                            <h5 id="cta-head" class="font-bold text-white text-base">Suka dengan kualitas streaming ini?</h5>
+                            <p id="cta-sub" class="text-xs text-gray-300">Dapatkan akses VIP tanpa iklan dan kecepatan unduh maksimal.</p>
+                        </div>
+                        <a href="#vip" onclick="alertCTA(event)" class="w-full sm:w-auto px-6 py-3 bg-netflix-red hover:bg-red-700 text-white font-semibold rounded-xl text-sm transition text-center shadow-lg shadow-netflix-red/30 shrink-0">
+                            <i class="fa-solid fa-crown mr-2"></i> <span data-i18n="btn_vip">Gabung VIP Sekarang</span>
+                        </a>
+                    </div>
+
+                    <!-- Episode Info & Synopsis -->
+                    <div class="bg-netflix-card border border-gray-800 rounded-2xl p-5 space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <span id="preview-show-title-tag" class="text-xs font-semibold uppercase tracking-wider text-netflix-red">Show Title</span>
+                                <h2 id="preview-ep-title" class="text-xl sm:text-2xl font-bold text-white mt-1">Season 1 Episode 1</h2>
+                            </div>
+                            <div class="flex items-center space-x-2 text-xs text-gray-400">
+                                <span id="preview-ep-date" class="bg-gray-900 border border-gray-800 px-2.5 py-1 rounded-lg"><i class="fa-regular fa-calendar mr-1"></i> 2023</span>
+                                <span class="bg-gray-900 border border-gray-800 px-2.5 py-1 rounded-lg text-amber-400"><i class="fa-solid fa-star mr-1"></i> <span id="preview-rating">8.5</span></span>
+                            </div>
+                        </div>
+                        <hr class="border-gray-800">
+                        <div>
+                            <h3 id="synopsis-heading" class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-2">Sinopsis Episode</h3>
+                            <p id="preview-synopsis" class="text-sm text-gray-300 leading-relaxed">Sinopsis belum dimuat...</p>
+                        </div>
+                    </div>
+
+                    <!-- Cast List -->
+                    <div class="bg-netflix-card border border-gray-800 rounded-2xl p-5">
+                        <h3 id="cast-heading" class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Pemeran Utama (Cast)</h3>
+                        <div id="preview-cast-container" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Selector -->
+                <div class="space-y-6">
+                    <div class="bg-netflix-card border border-gray-800 rounded-2xl p-5 space-y-4">
+                        <h3 id="nav-ep-heading" class="font-bold text-base text-white">Navigasi Episode</h3>
+                        <div>
+                            <label id="lbl-select-season" class="block text-xs font-semibold text-gray-400 mb-1.5">Pilih Season</label>
+                            <select id="preview-season-select" onchange="onPreviewSeasonChange()" class="w-full bg-black/50 border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-netflix-red">
+                            </select>
+                        </div>
+                        <div>
+                            <label id="lbl-select-ep" class="block text-xs font-semibold text-gray-400 mb-1.5">Pilih Episode</label>
+                            <div id="preview-episodes-list" class="space-y-1.5 max-h-80 overflow-y-auto pr-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Sticky Banner Footer Ads (Displayed only in Live Preview / Output pages) -->
+    <footer id="preview-footer-ads" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-netflix-dark/95 backdrop-blur border-t border-gray-800 py-2.5 px-2 shadow-2xl">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="hidden lg:block text-xs text-gray-400 pl-2">
+                <span class="font-bold text-white">TMDB Studio</span> &copy; 2026
+            </div>
+            <div class="mx-auto flex items-center justify-center overflow-x-auto max-w-full">
+                <div class="scale-[0.75] sm:scale-100 origin-center">
+                    <script>
+                        var atOptions_2 = {
+                            'key' : '2d751854ce36e13fefddaa58f93251e2',
+                            'format' : 'iframe',
+                            'height' : 90,
+                            'width' : 728,
+                            'params' : {}
+                        };
+                    </script>
+                    <script src="https://buffcasualwhine.com/2d751854ce36e13fefddaa58f93251e2/invoke.js"></script>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
