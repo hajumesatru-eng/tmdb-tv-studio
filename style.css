@@ -20,3 +20,11 @@ border-radius: 4px;
 ::-webkit-scrollbar-thumb:hover {
 background: #475569;
 }
+
+/* Responsive sticky banner adjustments for mobile devices */
+@media (max-width: 768px) {
+.ad-footer-frame {
+transform: scale(0.85);
+transform-origin: center;
+}
+}
